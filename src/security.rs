@@ -1,6 +1,7 @@
 use aes_gcm::{Aes256Gcm, Key, Nonce};
 use aes_gcm::aead::{Aead, KeyInit};
-use generic_array::{GenericArray, typenum::U12};
+use base64::{engine::general_purpose, Engine as _};
+use generic_array::typenum::U12;
 use anyhow::{anyhow, Result};
 use argon2::{Argon2, PasswordHash, PasswordHasher, PasswordVerifier};
 use argon2::password_hash::SaltString;
@@ -131,7 +132,7 @@ impl CredentialVault {
         let mut encrypted = nonce.to_vec();
         encrypted.extend_from_slice(&ciphertext);
 
-        Ok(base64::encode(&encrypted))
+        Ok(general_purpose::STANDARD.encode(&encrypted))
     }
 
     /// Decrypt credentials with master password
@@ -139,7 +140,7 @@ impl CredentialVault {
         let key = derive_key(password, salt)?;
         let cipher = Aes256Gcm::new(&key);
 
-        let encrypted = base64::decode(encrypted_b64)
+        let encrypted = general_purpose::STANDARD.decode(encrypted_b64)
             .map_err(|e| anyhow!("Base64 decode failed: {}", e))?;
 
         if encrypted.len() < NONCE_SIZE {
@@ -147,10 +148,10 @@ impl CredentialVault {
         }
 
         let (nonce_bytes, ciphertext) = encrypted.split_at(NONCE_SIZE);
-        let nonce = Nonce::from_slice(nonce_bytes);
+        let nonce = Nonce::from_slice(nonce_bytes).clone();
 
         let plaintext = cipher
-            .decrypt(nonce, ciphertext)
+            .decrypt(&nonce, ciphertext)
             .map_err(|e| anyhow!("AES-GCM decryption failed: {}", e))?;
 
         let json = String::from_utf8(plaintext)
@@ -185,7 +186,7 @@ fn generate_nonce() -> Nonce<U12> {
     let mut rng = rand::thread_rng();
     let mut nonce_bytes = [0u8; NONCE_SIZE];
     rng.fill(&mut nonce_bytes);
-    GenericArray::clone_from_slice(&nonce_bytes)
+    Nonce::<U12>::from_slice(&nonce_bytes).clone()
 }
 
 /// Encrypt arbitrary data with a password
@@ -201,7 +202,7 @@ pub fn encrypt_data(data: &[u8], password: &str, salt: &str) -> Result<String> {
     let mut encrypted = nonce.to_vec();
     encrypted.extend_from_slice(&ciphertext);
 
-    Ok(base64::encode(&encrypted))
+    Ok(general_purpose::STANDARD.encode(&encrypted))
 }
 
 /// Decrypt arbitrary data with a password
@@ -209,7 +210,7 @@ pub fn decrypt_data(encrypted_b64: &str, password: &str, salt: &str) -> Result<V
     let key = derive_key(password, salt)?;
     let cipher = Aes256Gcm::new(&key);
 
-    let encrypted = base64::decode(encrypted_b64)
+    let encrypted = general_purpose::STANDARD.decode(encrypted_b64)
         .map_err(|e| anyhow!("Base64 decode failed: {}", e))?;
 
     if encrypted.len() < NONCE_SIZE {
@@ -217,7 +218,7 @@ pub fn decrypt_data(encrypted_b64: &str, password: &str, salt: &str) -> Result<V
     }
 
     let (nonce_bytes, ciphertext) = encrypted.split_at(NONCE_SIZE);
-    let nonce = GenericArray::<u8, U12>::clone_from_slice(nonce_bytes);
+    let nonce = Nonce::<U12>::from_slice(nonce_bytes).clone();
 
     cipher
         .decrypt(&nonce, ciphertext)
