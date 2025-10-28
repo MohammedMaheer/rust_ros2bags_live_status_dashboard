@@ -10,11 +10,14 @@ use serde::{Deserialize, Serialize};
 use std::fs;
 use std::path::Path;
 
+#[allow(dead_code)]
 const NONCE_SIZE: usize = 12; // 96 bits for GCM
+#[allow(dead_code)]
 const CREDENTIAL_FILE: &str = "credentials.vault";
 
 /// Encrypted vault for storing S3 credentials, API keys, and secrets
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[allow(dead_code)]
 pub struct CredentialVault {
     /// Argon2 password hash (not the actual password)
     master_hash: String,
@@ -26,6 +29,7 @@ pub struct CredentialVault {
 
 /// Stored credentials
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[allow(dead_code)]
 pub struct StoredCredentials {
     pub s3_access_key: String,
     pub s3_secret_key: String,
@@ -48,6 +52,7 @@ impl Default for StoredCredentials {
 
 impl CredentialVault {
     /// Create a new vault and initialize with a master password
+    #[allow(dead_code)]
     pub fn new(master_password: &str) -> Result<Self> {
         let salt = SaltString::generate(rand::thread_rng());
         let argon2 = Argon2::default();
@@ -68,6 +73,7 @@ impl CredentialVault {
     }
 
     /// Load vault from disk
+    #[allow(dead_code)]
     pub fn load(vault_path: &Path, master_password: &str) -> Result<Self> {
         let data = fs::read_to_string(vault_path)
             .map_err(|e| anyhow!("Failed to read vault file: {}", e))?;
@@ -82,6 +88,7 @@ impl CredentialVault {
     }
 
     /// Save vault to disk
+    #[allow(dead_code)]
     pub fn save(&self, vault_path: &Path) -> Result<()> {
         let data = serde_json::to_string_pretty(&self)
             .map_err(|e| anyhow!("Failed to serialize vault: {}", e))?;
@@ -93,6 +100,7 @@ impl CredentialVault {
     }
 
     /// Verify master password against stored hash
+    #[allow(dead_code)]
     pub fn verify_password(&self, password: &str) -> Result<()> {
         let parsed_hash = PasswordHash::new(&self.master_hash)
             .map_err(|e| anyhow!("Invalid password hash: {}", e))?;
@@ -104,12 +112,14 @@ impl CredentialVault {
     }
 
     /// Unlock and retrieve credentials
+    #[allow(dead_code)]
     pub fn unlock(&self, master_password: &str) -> Result<StoredCredentials> {
         self.verify_password(master_password)?;
         Self::decrypt_credentials(&self.encrypted_creds, master_password, &self.nonce_salt)
     }
 
     /// Update credentials in vault
+    #[allow(dead_code)]
     pub fn update_credentials(&mut self, creds: StoredCredentials, master_password: &str) -> Result<()> {
         self.verify_password(master_password)?;
         self.encrypted_creds = Self::encrypt_credentials(&creds, master_password, &self.nonce_salt)?;
@@ -117,6 +127,7 @@ impl CredentialVault {
     }
 
     /// Encrypt credentials with master password
+    #[allow(dead_code)]
     fn encrypt_credentials(creds: &StoredCredentials, password: &str, salt: &str) -> Result<String> {
         let key = derive_key(password, salt)?;
         let cipher = Aes256Gcm::new(&key);
@@ -136,6 +147,7 @@ impl CredentialVault {
     }
 
     /// Decrypt credentials with master password
+    #[allow(dead_code)]
     fn decrypt_credentials(encrypted_b64: &str, password: &str, salt: &str) -> Result<StoredCredentials> {
         let key = derive_key(password, salt)?;
         let cipher = Aes256Gcm::new(&key);
@@ -148,7 +160,10 @@ impl CredentialVault {
         }
 
         let (nonce_bytes, ciphertext) = encrypted.split_at(NONCE_SIZE);
-        let nonce = Nonce::from_slice(nonce_bytes).clone();
+        let nonce = Nonce::<U12>::from(
+            <[u8; 12]>::try_from(nonce_bytes)
+                .map_err(|_| anyhow!("Invalid nonce size"))?
+        );
 
         let plaintext = cipher
             .decrypt(&nonce, ciphertext)
@@ -163,6 +178,7 @@ impl CredentialVault {
 }
 
 /// Derive a 256-bit key from password using Argon2
+#[allow(dead_code)]
 fn derive_key(password: &str, salt: &str) -> Result<Key<Aes256Gcm>> {
     let salt_bytes = SaltString::encode_b64(salt.as_bytes())
         .map_err(|e| anyhow!("Salt encoding failed: {}", e))?;
@@ -182,14 +198,16 @@ fn derive_key(password: &str, salt: &str) -> Result<Key<Aes256Gcm>> {
 }
 
 /// Generate a random 96-bit nonce for GCM
+#[allow(dead_code)]
 fn generate_nonce() -> Nonce<U12> {
     let mut rng = rand::thread_rng();
     let mut nonce_bytes = [0u8; NONCE_SIZE];
     rng.fill(&mut nonce_bytes);
-    Nonce::<U12>::from_slice(&nonce_bytes).clone()
+    Nonce::<U12>::from(nonce_bytes)
 }
 
 /// Encrypt arbitrary data with a password
+#[allow(dead_code)]
 pub fn encrypt_data(data: &[u8], password: &str, salt: &str) -> Result<String> {
     let key = derive_key(password, salt)?;
     let cipher = Aes256Gcm::new(&key);
@@ -206,6 +224,7 @@ pub fn encrypt_data(data: &[u8], password: &str, salt: &str) -> Result<String> {
 }
 
 /// Decrypt arbitrary data with a password
+#[allow(dead_code)]
 pub fn decrypt_data(encrypted_b64: &str, password: &str, salt: &str) -> Result<Vec<u8>> {
     let key = derive_key(password, salt)?;
     let cipher = Aes256Gcm::new(&key);
@@ -218,7 +237,10 @@ pub fn decrypt_data(encrypted_b64: &str, password: &str, salt: &str) -> Result<V
     }
 
     let (nonce_bytes, ciphertext) = encrypted.split_at(NONCE_SIZE);
-    let nonce = Nonce::<U12>::from_slice(nonce_bytes).clone();
+    let nonce = Nonce::<U12>::from(
+        <[u8; 12]>::try_from(nonce_bytes)
+            .map_err(|_| anyhow!("Invalid nonce size"))?
+    );
 
     cipher
         .decrypt(&nonce, ciphertext)

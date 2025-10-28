@@ -4,6 +4,7 @@ use std::path::Path;
 
 /// Metadata about exported dataset
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[allow(dead_code)]
 pub struct ExportManifest {
     pub export_id: String,
     pub format: ExportFormat,
@@ -13,6 +14,7 @@ pub struct ExportManifest {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[allow(dead_code)]
 pub enum ExportFormat {
     Parquet,
     CSV,
@@ -21,6 +23,7 @@ pub enum ExportFormat {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[allow(dead_code)]
 pub struct TopicExportInfo {
     pub topic: String,
     pub message_type: String,
@@ -29,6 +32,7 @@ pub struct TopicExportInfo {
 }
 
 /// Export recorded session to ML-ready format
+#[allow(dead_code)]
 pub async fn export_session(
     session_id: &str,
     output_dir: &Path,
@@ -42,6 +46,7 @@ pub async fn export_session(
     }
 }
 
+#[allow(dead_code)]
 async fn export_to_parquet(session_id: &str, output_dir: &Path) -> Result<ExportManifest> {
     tracing::info!("exporting session {} to Parquet in {}", session_id, output_dir.display());
 
@@ -85,6 +90,7 @@ async fn export_to_csv(session_id: &str, output_dir: &Path) -> Result<ExportMani
     Ok(manifest)
 }
 
+#[allow(dead_code)]
 async fn export_to_tfrecord(session_id: &str, output_dir: &Path) -> Result<ExportManifest> {
     tracing::info!("exporting session {} to TFRecord in {}", session_id, output_dir.display());
 
@@ -106,6 +112,7 @@ async fn export_to_tfrecord(session_id: &str, output_dir: &Path) -> Result<Expor
     Ok(manifest)
 }
 
+#[allow(dead_code)]
 async fn export_to_numpy(session_id: &str, output_dir: &Path) -> Result<ExportManifest> {
     tracing::info!("exporting session {} to Numpy in {}", session_id, output_dir.display());
 

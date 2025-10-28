@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[allow(dead_code)]
 pub struct TopicManifestEntry {
     pub topic: String,
     pub msg_type: String,
@@ -8,6 +9,7 @@ pub struct TopicManifestEntry {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[allow(dead_code)]
 pub struct RecordingMetadata {
     pub recording_id: String,
     pub start_time_unix_ms: u128,

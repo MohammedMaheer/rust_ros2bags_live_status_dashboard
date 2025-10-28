@@ -29,6 +29,7 @@ pub struct UploadedChunk {
 
 #[derive(Clone)]
 pub struct SyncDaemon {
+    #[allow(dead_code)]
     storage: Storage,
     config: SyncConfig,
     upload_queue: Arc<Mutex<Vec<UploadState>>>,
@@ -58,11 +59,13 @@ impl SyncDaemon {
         }
     }
 
+    #[allow(dead_code)]
     pub async fn get_status(&self) -> SyncStatus {
         self.sync_status.lock().await.clone()
     }
 
     /// Queue a segment for upload
+    #[allow(dead_code)]
     pub async fn queue_segment(&self, segment_path: PathBuf) -> Result<()> {
         let sha256 = Storage::segment_checksum(&segment_path).await?;
         let state = UploadState {
@@ -172,6 +175,7 @@ impl SyncDaemon {
     }
 }
 
+#[allow(dead_code)]
 pub fn start_sync_daemon(storage: Storage, cfg: SyncConfig) -> JoinHandle<()> {
     tokio::spawn(async move {
         let daemon = SyncDaemon::new(storage, cfg);

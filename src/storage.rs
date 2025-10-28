@@ -34,6 +34,7 @@ impl RecordFrame {
         buf
     }
 
+    #[allow(dead_code)]
     fn from_reader(reader: &mut dyn Read) -> Result<Option<(RecordFrame, Vec<u8>)>> {
         let mut magic_buf = [0u8; 4];
         if reader.read_exact(&mut magic_buf).is_err() {
@@ -132,6 +133,7 @@ impl Storage {
         Ok(new_path)
     }
 
+    #[allow(dead_code)]
     pub async fn list_segments(&self) -> Result<Vec<PathBuf>> {
         let mut entries = tokio::fs::read_dir(&*self.root).await?;
         let mut out = Vec::new();
@@ -153,6 +155,7 @@ impl Storage {
         Ok(out)
     }
 
+    #[allow(dead_code)]
     pub async fn segment_checksum(path: &Path) -> Result<String> {
         let data = tokio::fs::read(path).await?;
         let mut hasher = Sha256::new();
@@ -186,6 +189,7 @@ impl Storage {
         Ok((segment, Some(data)))
     }
 
+    #[allow(dead_code)]
     pub async fn replay_segment(path: &Path) -> Result<Vec<(String, String, u128, Vec<u8>)>> {
         let mut file = std::fs::File::open(path)?;
         let mut records = Vec::new();

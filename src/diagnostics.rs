@@ -6,6 +6,7 @@ use tokio::sync::Mutex;
 
 /// Real-time metrics snapshot
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[allow(dead_code)]
 pub struct MetricsSnapshot {
     pub timestamp: u128,
     pub cpu_percent: f32,
@@ -19,12 +20,14 @@ pub struct MetricsSnapshot {
 }
 
 /// Circular history buffer for metrics
+#[allow(dead_code)]
 pub struct MetricsCollector {
     history: Arc<Mutex<VecDeque<MetricsSnapshot>>>,
     max_history: usize,
 }
 
 impl MetricsCollector {
+    #[allow(dead_code)]
     pub fn new(max_history: usize) -> Self {
         MetricsCollector {
             history: Arc::new(Mutex::new(VecDeque::with_capacity(max_history))),
@@ -32,6 +35,7 @@ impl MetricsCollector {
         }
     }
 
+    #[allow(dead_code)]
     pub async fn record_snapshot(&self, snapshot: MetricsSnapshot) {
         let mut history = self.history.lock().await;
         history.push_back(snapshot);
@@ -40,14 +44,17 @@ impl MetricsCollector {
         }
     }
 
+    #[allow(dead_code)]
     pub async fn get_history(&self) -> Vec<MetricsSnapshot> {
         self.history.lock().await.iter().cloned().collect()
     }
 
+    #[allow(dead_code)]
     pub async fn get_latest(&self) -> Option<MetricsSnapshot> {
         self.history.lock().await.back().cloned()
     }
 
+    #[allow(dead_code)]
     pub async fn get_average(&self) -> Option<MetricsSnapshot> {
         let history = self.history.lock().await;
         if history.is_empty() {
@@ -71,6 +78,7 @@ impl MetricsCollector {
     }
 }
 
+#[allow(dead_code)]
 pub async fn start_metrics_server(_bind: &str) -> Result<()> {
     // Placeholder for Prometheus metrics endpoint
     tracing::info!("metrics server would start at {}", _bind);
@@ -79,7 +87,11 @@ pub async fn start_metrics_server(_bind: &str) -> Result<()> {
 
 pub fn detect_ros2_available() -> bool {
     // Try to detect ROS2 environment
-    std::env::var("ROS_DISTRO").is_ok() || std::env::var("ROS_DOMAIN_ID").is_ok()
+    let ros_distro_ok = std::env::var("ROS_DISTRO").is_ok();
+    let ros_domain_ok = std::env::var("ROS_DOMAIN_ID").is_ok();
+    let available = ros_distro_ok || ros_domain_ok;
+    tracing::info!("detect_ros2_available: ROS_DISTRO={}, ROS_DOMAIN_ID={}, result={}", ros_distro_ok, ros_domain_ok, available);
+    available
 }
 
 #[cfg(test)]
