@@ -1,0 +1,19 @@
+# Cargo build artifacts
+target/
+Cargo.lock
+
+# macOS specific
+.DS_Store
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# IDE files
+*.iml
+
+# Local testing files
+*.log
+.env
+.env.local
