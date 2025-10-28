@@ -1,0 +1,15 @@
+/Users/apple/Desktop/rust_ros2_recording_dashboard/target/release/deps/polars-fdb68b16dde7e020.d: /Users/apple/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/polars-0.32.1/src/lib.rs /Users/apple/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/polars-0.32.1/src/docs/mod.rs /Users/apple/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/polars-0.32.1/src/docs/eager.rs /Users/apple/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/polars-0.32.1/src/docs/lazy.rs /Users/apple/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/polars-0.32.1/src/docs/performance.rs /Users/apple/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/polars-0.32.1/src/export.rs /Users/apple/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/polars-0.32.1/src/prelude.rs
+
+/Users/apple/Desktop/rust_ros2_recording_dashboard/target/release/deps/libpolars-fdb68b16dde7e020.rlib: /Users/apple/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/polars-0.32.1/src/lib.rs /Users/apple/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/polars-0.32.1/src/docs/mod.rs /Users/apple/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/polars-0.32.1/src/docs/eager.rs /Users/apple/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/polars-0.32.1/src/docs/lazy.rs /Users/apple/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/polars-0.32.1/src/docs/performance.rs /Users/apple/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/polars-0.32.1/src/export.rs /Users/apple/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/polars-0.32.1/src/prelude.rs
+
+/Users/apple/Desktop/rust_ros2_recording_dashboard/target/release/deps/libpolars-fdb68b16dde7e020.rmeta: /Users/apple/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/polars-0.32.1/src/lib.rs /Users/apple/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/polars-0.32.1/src/docs/mod.rs /Users/apple/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/polars-0.32.1/src/docs/eager.rs /Users/apple/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/polars-0.32.1/src/docs/lazy.rs /Users/apple/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/polars-0.32.1/src/docs/performance.rs /Users/apple/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/polars-0.32.1/src/export.rs /Users/apple/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/polars-0.32.1/src/prelude.rs
+
+/Users/apple/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/polars-0.32.1/src/lib.rs:
+/Users/apple/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/polars-0.32.1/src/docs/mod.rs:
+/Users/apple/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/polars-0.32.1/src/docs/eager.rs:
+/Users/apple/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/polars-0.32.1/src/docs/lazy.rs:
+/Users/apple/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/polars-0.32.1/src/docs/performance.rs:
+/Users/apple/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/polars-0.32.1/src/export.rs:
+/Users/apple/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/polars-0.32.1/src/prelude.rs:
+
+# env-dep:CARGO_PKG_VERSION=0.32.1

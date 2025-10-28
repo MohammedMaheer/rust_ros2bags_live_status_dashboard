@@ -1,0 +1,12 @@
+/Users/apple/Desktop/rust_ros2_recording_dashboard/target/release/deps/lz4-bd9d46ace471a7c5.d: /Users/apple/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/lz4-1.28.1/src/lib.rs /Users/apple/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/lz4-1.28.1/src/liblz4.rs /Users/apple/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/lz4-1.28.1/src/decoder.rs /Users/apple/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/lz4-1.28.1/src/encoder.rs /Users/apple/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/lz4-1.28.1/src/block/mod.rs /Users/apple/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/lz4-1.28.1/src/../README.md
+
+/Users/apple/Desktop/rust_ros2_recording_dashboard/target/release/deps/liblz4-bd9d46ace471a7c5.rlib: /Users/apple/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/lz4-1.28.1/src/lib.rs /Users/apple/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/lz4-1.28.1/src/liblz4.rs /Users/apple/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/lz4-1.28.1/src/decoder.rs /Users/apple/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/lz4-1.28.1/src/encoder.rs /Users/apple/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/lz4-1.28.1/src/block/mod.rs /Users/apple/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/lz4-1.28.1/src/../README.md
+
+/Users/apple/Desktop/rust_ros2_recording_dashboard/target/release/deps/liblz4-bd9d46ace471a7c5.rmeta: /Users/apple/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/lz4-1.28.1/src/lib.rs /Users/apple/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/lz4-1.28.1/src/liblz4.rs /Users/apple/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/lz4-1.28.1/src/decoder.rs /Users/apple/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/lz4-1.28.1/src/encoder.rs /Users/apple/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/lz4-1.28.1/src/block/mod.rs /Users/apple/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/lz4-1.28.1/src/../README.md
+
+/Users/apple/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/lz4-1.28.1/src/lib.rs:
+/Users/apple/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/lz4-1.28.1/src/liblz4.rs:
+/Users/apple/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/lz4-1.28.1/src/decoder.rs:
+/Users/apple/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/lz4-1.28.1/src/encoder.rs:
+/Users/apple/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/lz4-1.28.1/src/block/mod.rs:
+/Users/apple/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/lz4-1.28.1/src/../README.md:

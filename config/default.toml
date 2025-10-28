@@ -1,0 +1,11 @@
+[storage]
+path = "./data"
+wal_segment_size = 16777216  # 16MB
+compress = true
+encryption = ''
+
+[sync]
+endpoint = "https://s3.amazonaws.com"
+bucket = "my-robot-recordings"
+chunk_size = 16777216
+max_retries = 7

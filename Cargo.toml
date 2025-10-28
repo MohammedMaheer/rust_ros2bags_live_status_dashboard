@@ -1,0 +1,46 @@
+[package]
+name = "rust_ros2_recorder"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tokio = { version = "1.40", features = ["rt-multi-thread", "macros", "time"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+toml = "0.8"
+anyhow = "1.0"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["fmt", "env-filter"] }
+bytes = "1.4"
+sha2 = "0.10"
+reqwest = { version = "0.11", features = ["json", "multipart", "gzip", "stream"] }
+clap = { version = "4.0", features = ["derive"] }
+futures = "0.3"
+lz4 = "1.24"
+zstd = "0.11"
+anymap = "0.12"
+hex = "0.4"
+crc32fast = "1.3"
+fastrand = "2.0"
+rand = "0.8"
+
+# UI
+eframe = { version = "0.22", optional = true }
+egui = { version = "0.22", optional = true }
+
+# Arrow / Parquet / Polars (for exporter)
+arrow2 = { version = "0.17", optional = true }
+parquet2 = { version = "0.15", optional = true }
+polars = { version = "0.32", optional = true, features = ["lazy", "parquet"] }
+
+# ROS2 crate (r2r) - optional because workspace may not have ROS2
+r2r = { version = "0.9", optional = true }
+
+[features]
+default = ["ui", "export"]
+ui = ["eframe", "egui"]
+export = ["arrow2", "parquet2", "polars"]
+ros2 = ["r2r"]
+
+[dev-dependencies]
+tempfile = "3.8"
