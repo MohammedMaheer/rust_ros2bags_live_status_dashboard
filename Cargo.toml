@@ -24,6 +24,12 @@ crc32fast = "1.3"
 fastrand = "2.0"
 rand = "0.8"
 
+# Security
+aes-gcm = "0.10"
+generic-array = "0.14"
+argon2 = "0.5"
+base64 = "0.21"
+
 # UI
 eframe = { version = "0.22", optional = true }
 egui = { version = "0.22", optional = true }

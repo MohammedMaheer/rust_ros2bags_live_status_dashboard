@@ -210,6 +210,7 @@ mod tests {
             wal_segment_size: 1024 * 1024,
             compress: false,
             encryption: None,
+            enable_aes_gcm: false,
         };
 
         let storage = Storage::new(&cfg).await?;
@@ -238,9 +239,10 @@ mod tests {
         let tmpdir = TempDir::new()?;
         let cfg = StorageConfig {
             path: tmpdir.path().to_path_buf(),
-            wal_segment_size: 1024 * 1024,
+            wal_segment_size: 512,
             compress: false,
             encryption: None,
+            enable_aes_gcm: false,
         };
 
         let storage = Storage::new(&cfg).await?;
@@ -272,9 +274,10 @@ mod tests {
         let tmpdir = TempDir::new()?;
         let cfg = StorageConfig {
             path: tmpdir.path().to_path_buf(),
-            wal_segment_size: 1024 * 1024,
+            wal_segment_size: 512,
             compress: false,
             encryption: None,
+            enable_aes_gcm: false,
         };
 
         let storage = Storage::new(&cfg).await?;
@@ -302,6 +305,7 @@ mod tests {
             wal_segment_size: 1024 * 1024,
             compress: false,
             encryption: None,
+            enable_aes_gcm: false,
         };
 
         let storage = Storage::new(&cfg).await?;
@@ -334,6 +338,7 @@ mod tests {
             wal_segment_size: 1024 * 1024,
             compress: false,
             encryption: None,
+            enable_aes_gcm: false,
         };
 
         let storage = Storage::new(&cfg).await?;

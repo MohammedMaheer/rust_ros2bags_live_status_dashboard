@@ -17,31 +17,25 @@ pub struct DashboardState {
 
 #[cfg(feature = "ui")]
 pub fn run_dashboard(
-    _storage: Storage,
-    _sync_daemon: SyncDaemon,
-    _ros2_available: bool,
+    storage: Storage,
+    sync_daemon: SyncDaemon,
+    ros2_available: bool,
 ) -> anyhow::Result<()> {
+    let storage_clone = storage.clone();
+    let sync_daemon_clone = sync_daemon.clone();
     let options = eframe::NativeOptions::default();
     let _ = eframe::run_native(
         "ROS2 Recording Dashboard",
         options,
         Box::new(move |_cc| {
             Box::new(DashboardApp::new(
-                _ros2_available,
-                _storage.clone(),
-                _sync_daemon.clone(),
+                ros2_available,
+                storage_clone.clone(),
+                sync_daemon_clone.clone(),
             ))
         }),
     );
     Ok(())
-}
-
-#[cfg(not(feature = "ui"))]
-pub async fn run_dashboard(_config: AppConfig, _storage: Storage) -> Result<()> {
-    println!("Dashboard: UI feature not enabled");
-    loop {
-        tokio::time::sleep(tokio::time::Duration::from_secs(60)).await;
-    }
 }
 
 #[cfg(feature = "ui")]

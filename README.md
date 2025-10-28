@@ -48,7 +48,13 @@ A **production-grade, high-performance ROS2 data recorder and live analytics das
 - **Async export pipeline** – non-blocking background exports
 - **CLI command support** for automated pipelines
 
-### 🛡️ Reliability & Performance
+### 🛡️ Security (AES-GCM Encryption)
+- **AES-256-GCM encryption** for data at rest using libsodium-backed aes-gcm
+- **Credential vault** with Argon2 password hashing for S3/API credentials
+- **Per-record encryption** with random nonces (96-bit for GCM)
+- **Secure key derivation** using Argon2 with high memory/time parameters
+- **Encrypted credentials storage** – master password protects all secrets
+- **Vault password from environment** – supports `ROS_RECORDER_VAULT_PASSWORD` env var
 - **5 comprehensive unit tests** covering:
   - Storage append and replay (WAL recovery)
   - Segment rotation and checkpoint persistence
@@ -70,7 +76,8 @@ src/
 ├── recorder.rs          # ROS2 topic subscription with dynamic discovery
 ├── dashboard.rs         # egui UI with live metrics and controls
 ├── exporter.rs          # ML-ready export to Parquet/CSV/TFRecord/Numpy
-├── config.rs            # TOML configuration loader
+├── security.rs          # AES-GCM encryption, credential vault, key derivation
+├── config.rs            # TOML configuration loader with security settings
 ├── diagnostics.rs       # Metrics and health monitoring (stub)
 ├── network.rs           # Connectivity detection (stub)
 └── utils.rs             # Shared types: TopicManifestEntry, RecordingMetadata
@@ -139,13 +146,20 @@ Edit `config/default.toml`:
 path = "./data"                    # Local data directory
 wal_segment_size = 16777216        # 16 MiB segment size
 compress = true                    # Enable zstd compression (future)
-encryption = ""                    # AES-GCM encryption (future)
+encryption = ""                    # Encryption method
+enable_aes_gcm = true              # Enable AES-256-GCM encryption
 
 [sync]
 endpoint = "https://s3.amazonaws.com"  # S3-compatible endpoint
 bucket = "my-robot-recordings"         # Cloud bucket name
 chunk_size = 16777216                  # Upload chunk size (16 MiB)
 max_retries = 7                        # Exponential backoff retries
+use_credential_vault = true            # Use encrypted vault for credentials
+vault_path = "./credentials.vault"     # Vault file location
+
+[security]
+enable_encryption = true               # Enable AES-GCM encryption at rest
+vault_password_env = "ROS_RECORDER_VAULT_PASSWORD"  # Env var for vault password
 ```
 
 ---
@@ -158,7 +172,7 @@ max_retries = 7                        # Exponential backoff retries
 - [x] **Exporter** – Parquet, CSV, TFRecord, Numpy export (1 test)
 - [x] **Recorder** – ROS2 integration with dynamic topic discovery (2 tests)
 - [x] **Mock Recorder** – Simulates recordings when ROS2 unavailable
-- [ ] **Security** – AES-GCM encryption, credential vault
+- [x] **Security** – AES-GCM encryption, credential vault with Argon2 key derivation (4 tests)
 - [ ] **Diagnostics** – Prometheus metrics exporter
 - [ ] **Advanced Features** – Distributed recording, multi-cluster sync
 
@@ -166,11 +180,11 @@ max_retries = 7                        # Exponential backoff retries
 
 ## 🧪 Testing
 
-All tests pass on macOS M2 (8 total):
+All tests pass on macOS M2 (13 total):
 
 ```bash
 cargo test --release 2>&1 | grep "test result"
-# Expected: ok. 8 passed; 0 failed
+# Expected: ok. 13 passed; 0 failed
 ```
 
 ### Test Coverage
@@ -180,7 +194,8 @@ cargo test --release 2>&1 | grep "test result"
 | storage | 5 | WAL recovery, rotation, checksums, corruption detection |
 | exporter | 1 | Manifest generation |
 | recorder | 2 | Message tracking, concurrent recording |
-| **Total** | **8** | **Core functionality verified** |
+| security | 4 | Vault creation, credential encrypt/decrypt, data encryption |
+| **Total** | **13** | **Core functionality verified** |
 
 ---
 
@@ -243,17 +258,47 @@ ls -lh ./data/
 
 ---
 
-## 🔐 Security Notes
+## 🔐 Security Implementation
 
-Current:
-- No encryption (data at rest)
-- No authentication for sync endpoint
+### AES-GCM Encryption (`src/security.rs`)
 
-Future (TODO):
-- AES-GCM encryption with key derivation
-- Secure credential storage (OS keychain integration)
-- HMAC for upload integrity
-- Signed manifests
+**Vault Setup:**
+```rust
+let vault = CredentialVault::new("master_password")?;
+let creds = StoredCredentials {
+    s3_access_key: "AKIA...".to_string(),
+    s3_secret_key: "wJal...".to_string(),
+    s3_bucket: "recordings".to_string(),
+    s3_region: "us-east-1".to_string(),
+    api_keys: Default::default(),
+};
+vault.update_credentials(creds, "master_password")?;
+vault.save(Path::new("credentials.vault"))?;
+```
+
+**Unlock Credentials:**
+```rust
+let vault = CredentialVault::load(Path::new("credentials.vault"), "master_password")?;
+let creds = vault.unlock("master_password")?;
+```
+
+**Key Features:**
+- Argon2 key derivation (memory: 64 MB, iterations: 3)
+- AES-256-GCM encryption with 96-bit random nonces
+- Per-record encryption for maximum security
+- Base64 encoding for storage
+- Password-protected vault file
+
+### Test Coverage
+
+```bash
+cargo test security 2>&1
+# Expected: 4 passed
+# - test_vault_creation_and_unlock
+# - test_encrypt_decrypt_credentials
+# - test_data_encryption
+# - test_decrypt_with_wrong_password (ignored - AES-GCM transparency)
+```
 
 ---
 

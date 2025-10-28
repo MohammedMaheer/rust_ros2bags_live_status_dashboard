@@ -6,6 +6,7 @@ mod dashboard;
 mod diagnostics;
 mod exporter;
 mod recorder;
+mod security;
 mod storage;
 mod sync;
 mod network;

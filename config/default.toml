@@ -3,9 +3,17 @@ path = "./data"
 wal_segment_size = 16777216  # 16MB
 compress = true
 encryption = ''
+enable_aes_gcm = true
 
 [sync]
 endpoint = "https://s3.amazonaws.com"
 bucket = "my-robot-recordings"
 chunk_size = 16777216
 max_retries = 7
+use_credential_vault = true
+vault_path = "./credentials.vault"
+
+[security]
+enable_encryption = true
+vault_password_env = "ROS_RECORDER_VAULT_PASSWORD"
+
